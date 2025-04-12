@@ -1,18 +1,26 @@
 import * as React from 'react'
-import { Outlet, createRootRoute } from '@tanstack/react-router'
+import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 import { ThemeProvider } from '@/components/theme/theme-provider'
 import '../__root.css'
+import { AuthProvider } from '@/context/AuthContextProvider'
 
-export const Route = createRootRoute({
-  component: RootComponent,
+interface MyRouterContext {
+  auth: {
+    isAuthenticated: boolean
+  }
+}
+export const Route = createRootRouteWithContext<MyRouterContext>()({
+  component: () => <RootComponent />,
 })
 
 function RootComponent() {
   return (
     <React.Fragment>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <Outlet />
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <Outlet />
+        </ThemeProvider>
+      </AuthProvider>
     </React.Fragment>
   )
 }
