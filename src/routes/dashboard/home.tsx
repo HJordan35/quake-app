@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useSeismic } from '@/hooks/data/useSeismic'
 import { SeismicTable } from '@/components/dashboard/seismic-table'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import NavGlobe from '@/components/globe/nav-globe'
 
 export const Route = createFileRoute('/dashboard/home')({
   component: RouteComponent,
@@ -11,7 +12,7 @@ function RouteComponent() {
   const { parsedMessages, connectionStatus, averagePerHour, maxMagnitude, averageMagnitude } = useSeismic()
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4 p-4 h-full">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-left">Recent Seismic Events</h1>
         <div className="flex items-center gap-4">
@@ -24,7 +25,7 @@ function RouteComponent() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 h-full">
         <div className="flex flex-col gap-2">
           <div className="flex flex-row gap-2">
             <Card className="w-1/2">
@@ -58,6 +59,7 @@ function RouteComponent() {
             </p>
           )}
         </div>
+        <NavGlobe data={parsedMessages} onPointClick={() => {}} />
       </div>
     </div>
   )

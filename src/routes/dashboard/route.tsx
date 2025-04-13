@@ -21,7 +21,7 @@ export const Route = createFileRoute('/dashboard')({
 
 function RouteComponent() {
   return (
-    <div className="space-y-6 w-full">
+    <div className="space-y-6 w-full h-full">
       <Outlet />
     </div>
   )

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 
-interface SeismicMessage {
+export interface SeismicMessage {
   action: string
   data: {
     type: string
@@ -120,6 +120,8 @@ const useSeismic = () => {
     parsedMessages,
     connectionStatus,
     averagePerHour,
+    averageMagnitude,
+    maxMagnitude,
   }
 }
 
