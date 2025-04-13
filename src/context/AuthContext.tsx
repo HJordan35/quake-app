@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import { AuthResponse, LoginCredentials } from '@/lib/auth-service'
+import { AuthResponse, LoginCredentials } from '@/services/auth-service'
 
 export interface User {
   email: string

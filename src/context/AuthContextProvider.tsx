@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { AuthContext, User, NavigationOptions } from './AuthContext'
-import { authService, LoginCredentials } from '@/lib/auth-service'
+import { authService, LoginCredentials } from '@/services/auth-service'
 
 // Keys for sessionStorage
 const AUTH_STORAGE_KEY = 'quake_app_auth'

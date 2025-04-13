@@ -32,7 +32,7 @@ function RootComponent() {
 
             {/* Main content area */}
             <div className="flex-1 w-full max-w-6xl">
-              <div className="px-6 py-6">
+              <div className="px-6 py-6 h-full">
                 <Outlet />
               </div>
             </div>
