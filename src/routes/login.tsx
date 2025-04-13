@@ -1,7 +1,5 @@
 import { useState, FormEvent } from 'react'
-import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
@@ -50,15 +48,16 @@ function RouteComponent() {
   }
 
   return (
-    <div className={cn('flex flex-col gap-6')}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>Enter your email below to login to your account</CardDescription>
-        </CardHeader>
-        <CardContent>
+    <div className="space-y-6 w-full">
+      <div className="border-b pb-2 mb-6">
+        <h1 className="text-2xl font-bold">Login</h1>
+        <p className="text-sm text-white/60">Enter your credentials to access your account</p>
+      </div>
+
+      <div className="border rounded-lg">
+        <div className="p-6">
           {(error || formError) && (
-            <div className="mb-5 p-3 bg-red-50 text-red-600 border border-red-200 rounded-md">
+            <div className="mb-5 p-3 border border-red-500/50 bg-red-500/10 text-red-200 rounded-md">
               <p>{formError || error}</p>
             </div>
           )}
@@ -66,7 +65,9 @@ function RouteComponent() {
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-white/80">
+                  Email
+                </Label>
                 <Input
                   id="email"
                   type="email"
@@ -79,7 +80,9 @@ function RouteComponent() {
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password" className="text-white/80">
+                    Password
+                  </Label>
                 </div>
                 <Input
                   id="password"
@@ -90,7 +93,7 @@ function RouteComponent() {
                   disabled={isLoading}
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button type="submit" disabled={isLoading}>
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -102,8 +105,8 @@ function RouteComponent() {
               </Button>
             </div>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   )
 }

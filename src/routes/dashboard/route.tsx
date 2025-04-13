@@ -3,7 +3,6 @@ import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 export const Route = createFileRoute('/dashboard')({
   component: RouteComponent,
   beforeLoad: ({ context, location }) => {
-    // Check if user is authenticated, redirect to login if not
     if (!context.auth.isAuthenticated) {
       throw redirect({
         to: '/login',
@@ -22,8 +21,7 @@ export const Route = createFileRoute('/dashboard')({
 
 function RouteComponent() {
   return (
-    <div>
-      <h1>Dashboard</h1>
+    <div className="space-y-6 w-full">
       <Outlet />
     </div>
   )
