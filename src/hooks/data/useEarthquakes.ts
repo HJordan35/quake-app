@@ -19,7 +19,7 @@ export function useEarthquakes(params: EarthquakeQueryParams) {
       setError(null)
 
       try {
-        const result = await earthquakeService.queryEarthquakes({ ...params, limit: 10 })
+        const result = await earthquakeService.queryEarthquakes({ ...params, limit: 100 })
         setData(result)
       } catch (err) {
         setError(err instanceof Error ? err : new Error('An unknown error occurred'))
