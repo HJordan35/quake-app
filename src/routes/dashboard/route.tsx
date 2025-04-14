@@ -40,13 +40,15 @@ function RouteComponent() {
         </li>
         <li>
           <Link
-            to="/dashboard"
+            to="/dashboard/explore"
             className={cn(
               'text-sm px-3 py-2 rounded-md transition-colors',
-              pathname === '/dashboard' ? 'bg-primary text-primary-foreground font-medium' : 'hover:bg-secondary'
+              pathname === '/dashboard/explore'
+                ? 'bg-primary text-primary-foreground font-medium'
+                : 'hover:bg-secondary'
             )}
           >
-            Settings
+            Explore
           </Link>
         </li>
       </ul>
