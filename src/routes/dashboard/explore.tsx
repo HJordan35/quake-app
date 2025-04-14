@@ -4,6 +4,7 @@ import { BarChartComponent, MagnitudeDistributionData } from '@/components/chart
 import { ScatterChartComponent, DepthMagnitudeData } from '@/components/charts/scatter'
 import { useEarthquakesByTimeRange } from '@/hooks/data/useEarthquakes'
 import { EarthquakeFeature, EarthquakeResponse } from '@/services/earthquake-service'
+import { FadeUp } from '@/components/animation/fade-up'
 
 export const Route = createFileRoute('/dashboard/explore')({
   component: EarthquakeExplorer,
@@ -60,7 +61,7 @@ function EarthquakeExplorer() {
       {error && <div className="p-4 text-red-700 bg-red-100 rounded-md mb-6">Error: {error.message}</div>}
 
       {data && !isLoading && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <FadeUp className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <ScatterChartComponent
             data={depthMagnitudeData}
             title="Depth vs. Magnitude Relationship"
@@ -73,7 +74,7 @@ function EarthquakeExplorer() {
             description={`${starttime} to ${endtime}`}
             footerText={`Based on ${data.features.length} earthquakes`}
           />
-        </div>
+        </FadeUp>
       )}
     </div>
   )
