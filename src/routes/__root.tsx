@@ -39,13 +39,13 @@ function RootComponent() {
   return (
     <React.Fragment>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <div className="min-h-screen bg-background flex flex-col border-white/10 border-[1px]">
-          <div className="border-b  flex justify-between">
-            <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 h-14 flex items-center">
+        <div className="h-screen flex flex-col bg-background">
+          <div className="border-b h-14 shrink-0 flex justify-between">
+            <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 flex items-center">
               <h1 className="text-xl font-bold">Quake App</h1>
             </div>
             {isAuthenticated && (
-              <div className="mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center">
+              <div className="px-4 sm:px-6 lg:px-8 flex items-center">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="icon">
@@ -61,16 +61,14 @@ function RootComponent() {
             )}
           </div>
 
-          <div className="flex flex-grow justify-center w-full">
-            <div className="border-r border-white/10 w-[80px] lg:w-[120px]"></div>
+          <div className="flex flex-1 overflow-hidden">
+            <div className="border-r border-white/10 w-[80px] lg:w-[120px] shrink-0"></div>
 
-            <div className="flex-1 w-full max-w-6xl">
-              <div className="px-6 py-6 h-full">
-                <Outlet />
-              </div>
+            <div className="flex-1 max-w-6xl p-6 overflow-hidden">
+              <Outlet />
             </div>
 
-            <div className="border-l border-white/10 w-[80px] lg:w-[120px]"></div>
+            <div className="border-l border-white/10 w-[80px] lg:w-[120px] shrink-0"></div>
           </div>
         </div>
       </ThemeProvider>

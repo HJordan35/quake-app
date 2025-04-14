@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
+import { mockSeismicData } from './mockSeismicData'
 
 export interface SeismicMessage {
   action: string
@@ -23,7 +24,13 @@ export interface SeismicMessage {
   }
 }
 
-const useSeismic = () => {
+interface UseSeismicOptions {
+  useMockData?: boolean
+  mockDataDelay?: number
+}
+
+const useSeismic = (options: UseSeismicOptions = {}) => {
+  const { useMockData = true, mockDataDelay = 300 } = options
   const [socketUrl] = useState('wss://www.seismicportal.eu/standing_order/websocket')
   const [messageHistory, setMessageHistory] = useState<MessageEvent[]>([])
   const [parsedMessages, setParsedMessages] = useState<SeismicMessage[]>([])
@@ -31,6 +38,26 @@ const useSeismic = () => {
   const [averagePerHour, setAveragePerHour] = useState(0)
   const [averageMagnitude, setAverageMagnitude] = useState(0)
   const [maxMagnitude, setMaxMagnitude] = useState(0)
+  const [connectionStatus, setConnectionStatus] = useState<string>('Uninstantiated')
+  const mocking = useRef(false)
+
+  useEffect(() => {
+    if (useMockData && !mocking.current) {
+      mocking.current = true
+      setConnectionStatus('Open (Mock Data)')
+
+      setParsedMessages([])
+
+      const addMockData = async () => {
+        for (let i = 0; i < mockSeismicData.length; i++) {
+          await new Promise(resolve => setTimeout(resolve, mockDataDelay))
+          setParsedMessages(prev => [...prev, mockSeismicData[i]])
+        }
+      }
+
+      addMockData()
+    }
+  }, [useMockData, mockDataDelay])
 
   useEffect(() => {
     const updateAverage = () => {
@@ -46,56 +73,55 @@ const useSeismic = () => {
   }, [parsedMessages])
 
   useEffect(() => {
-    const updateAverageMagnitude = () => {
-      const totalMagnitude = parsedMessages.reduce((sum, message) => sum + message.data.properties.mag, 0)
-      const averageMagnitude = totalMagnitude / parsedMessages.length
-      setAverageMagnitude(averageMagnitude)
-    }
+    if (parsedMessages.length > 0) {
+      const updateAverageMagnitude = () => {
+        const totalMagnitude = parsedMessages.reduce((sum, message) => sum + message.data.properties.mag, 0)
+        const averageMagnitude = totalMagnitude / parsedMessages.length
+        setAverageMagnitude(averageMagnitude)
+      }
 
-    const updateMaxMagnitude = () => {
-      const maxMagnitude = Math.max(...parsedMessages.map(message => message.data.properties.mag))
-      setMaxMagnitude(maxMagnitude)
-    }
+      const updateMaxMagnitude = () => {
+        const maxMagnitude = Math.max(...parsedMessages.map(message => message.data.properties.mag))
+        setMaxMagnitude(maxMagnitude)
+      }
 
-    updateAverageMagnitude()
-    updateMaxMagnitude()
+      updateAverageMagnitude()
+      updateMaxMagnitude()
+    }
   }, [parsedMessages])
 
-  const onOpen = useCallback(() => {
-    console.log('WebSocket connection established')
-  }, [])
-
-  const onClose = useCallback(() => {
-    console.log('WebSocket connection closed')
-  }, [])
-
-  const onMessage = useCallback((event: MessageEvent) => {
-    try {
-      const data = JSON.parse(event.data)
-      console.log('Message received:', data)
-      return data
-    } catch (error) {
-      console.error('Failed to parse message:', error)
-      return null
-    }
-  }, [])
-
-  const onError = useCallback((event: Event) => {
-    console.error('WebSocket error:', event)
-  }, [])
-
-  const { lastMessage, readyState } = useWebSocket(socketUrl, {
+  // Skip WebSocket setup if using mock data
+  const { lastMessage, readyState } = useWebSocket(useMockData ? null : socketUrl, {
     reconnectAttempts: 10,
     reconnectInterval: 3000,
     shouldReconnect: () => true,
-    onOpen,
-    onClose,
-    onError,
-    onMessage,
+    onOpen: () => {
+      console.log('WebSocket connection established')
+      setConnectionStatus('Open')
+    },
+    onClose: () => {
+      console.log('WebSocket connection closed')
+      setConnectionStatus('Closed')
+    },
+    onError: (event: Event) => {
+      console.error('WebSocket error:', event)
+      setConnectionStatus('Error')
+    },
+    onMessage: (event: MessageEvent) => {
+      try {
+        const data = JSON.parse(event.data)
+        console.log('Message received:', data)
+        return data
+      } catch (error) {
+        console.error('Failed to parse message:', error)
+        return null
+      }
+    },
   })
 
+  // Only process WebSocket messages if not using mock data
   useEffect(() => {
-    if (lastMessage !== null) {
+    if (!useMockData && lastMessage !== null) {
       setMessageHistory(prev => prev.concat(lastMessage))
 
       try {
@@ -105,15 +131,21 @@ const useSeismic = () => {
         console.error('Failed to parse message:', error)
       }
     }
-  }, [lastMessage])
+  }, [lastMessage, useMockData])
 
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: 'Connecting',
-    [ReadyState.OPEN]: 'Open',
-    [ReadyState.CLOSING]: 'Closing',
-    [ReadyState.CLOSED]: 'Closed',
-    [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
-  }[readyState]
+  // Set connection status based on readyState when not using mock data
+  useEffect(() => {
+    if (!useMockData) {
+      const statusMap = {
+        [ReadyState.CONNECTING]: 'Connecting',
+        [ReadyState.OPEN]: 'Open',
+        [ReadyState.CLOSING]: 'Closing',
+        [ReadyState.CLOSED]: 'Closed',
+        [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
+      }
+      setConnectionStatus(statusMap[readyState])
+    }
+  }, [readyState, useMockData])
 
   return {
     messageHistory,
