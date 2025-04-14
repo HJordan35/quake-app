@@ -1,4 +1,5 @@
 import { formatDistanceToNow } from 'date-fns'
+import { useState, useEffect } from 'react'
 
 interface SeismicMessage {
   action: string
@@ -24,6 +25,8 @@ interface SeismicMessage {
 
 interface SeismicTableProps {
   parsedMessages: SeismicMessage[]
+  onSelectItem?: (index: number, item: SeismicMessage) => void
+  initialSelectedIndex?: number | null
 }
 
 const formatDate = (dateString: string) => {
@@ -41,9 +44,24 @@ const formatDate = (dateString: string) => {
   }
 }
 
-export function SeismicTable({ parsedMessages }: SeismicTableProps) {
+export function SeismicTable({ parsedMessages, onSelectItem, initialSelectedIndex }: SeismicTableProps) {
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(initialSelectedIndex || null)
+
+  useEffect(() => {
+    if (initialSelectedIndex !== undefined && initialSelectedIndex !== selectedIndex) {
+      setSelectedIndex(initialSelectedIndex)
+    }
+  }, [initialSelectedIndex, selectedIndex])
+
   if (parsedMessages.length === 0) {
     return <p className="text-gray-400">No seismic events received yet.</p>
+  }
+
+  const handleSelectItem = (index: number) => {
+    setSelectedIndex(index)
+    if (onSelectItem) {
+      onSelectItem(index, parsedMessages[index])
+    }
   }
 
   return (
@@ -60,9 +78,16 @@ export function SeismicTable({ parsedMessages }: SeismicTableProps) {
         {parsedMessages.map((message, index) => {
           const { flynn_region, lat, lon, mag, time } = message.data.properties
           const formattedTime = formatDate(time)
+          const isSelected = index === selectedIndex
 
           return (
-            <div key={index} className="grid grid-cols-[2fr_1fr_1.5fr] gap-4 py-2 px-4 border-b">
+            <div
+              key={index}
+              className={`grid grid-cols-[2fr_1fr_1.5fr] gap-4 py-2 px-4 border-b hover:bg-white/5 cursor-pointer transition-colors duration-150 ${
+                isSelected ? 'bg-white/10' : ''
+              }`}
+              onClick={() => handleSelectItem(index)}
+            >
               <div className="text-left">
                 <div className="flex flex-col text-xs">
                   {flynn_region}

@@ -30,7 +30,7 @@ interface UseSeismicOptions {
 }
 
 const useSeismic = (options: UseSeismicOptions = {}) => {
-  const { useMockData = true, mockDataDelay = 300 } = options
+  const { useMockData = true, mockDataDelay = 1000 } = options
   const [socketUrl] = useState('wss://www.seismicportal.eu/standing_order/websocket')
   const [messageHistory, setMessageHistory] = useState<MessageEvent[]>([])
   const [parsedMessages, setParsedMessages] = useState<SeismicMessage[]>([])

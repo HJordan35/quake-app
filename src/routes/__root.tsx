@@ -61,7 +61,7 @@ function RootComponent() {
             )}
           </div>
 
-          <div className="flex flex-1 overflow-hidden">
+          <div className="flex flex-1 justify-center w-full overflow-hidden">
             <div className="border-r border-white/10 w-[80px] lg:w-[120px] shrink-0"></div>
 
             <div className="flex-1 max-w-6xl p-6 overflow-hidden">
