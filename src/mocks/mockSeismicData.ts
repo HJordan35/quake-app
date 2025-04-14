@@ -1,4 +1,4 @@
-import { SeismicMessage } from './useSeismic'
+import { SeismicMessage } from '../hooks/data/useSeismic'
 
 // Generate a random time within the last 24 hours
 const getRandomRecentTime = (): string => {

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
-import { mockSeismicData } from './mockSeismicData'
+import { mockSeismicData } from '../../mocks/mockSeismicData'
 
 export interface SeismicMessage {
   action: string
