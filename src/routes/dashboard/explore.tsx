@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { EarthquakeList } from '../../components/EarthquakeList'
+import { BarChartComponent } from '@/components/charts/bar'
 
 export const Route = createFileRoute('/dashboard/explore')({
   component: EarthquakeComponent,
@@ -11,7 +11,7 @@ function EarthquakeComponent() {
       <h1 className="text-3xl font-bold mb-6">Earthquake Data Explorer</h1>
       <p className="mb-6 text-gray-600">View recent earthquake data from around the world using the FDSNWS API.</p>
 
-      <EarthquakeList />
+      <BarChartComponent />
     </div>
   )
 }
