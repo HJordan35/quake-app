@@ -6,6 +6,7 @@ import { useAuth, AuthProvider } from '@/context/AuthContext'
 import { Link, useLocation } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import { UserMenu } from '@/auth/UserMenu'
+import { ThemeToggle } from '@/components/theme/theme-toggle'
 
 export const Route = createRootRoute({
   component: () => <RootComponent />,
@@ -61,21 +62,27 @@ function AppLayout() {
                     </Link>
                   </li>
                 </ul>
-                <div className="px-4 sm:px-6 lg:px-8 flex items-center">
+                <div className="px-4 sm:px-6 lg:px-8 flex items-center gap-2">
+                  <ThemeToggle />
                   <UserMenu />
                 </div>
               </>
             )}
+            {!isAuthenticated && (
+              <div className="px-4 sm:px-6 lg:px-8 flex items-center">
+                <ThemeToggle />
+              </div>
+            )}
           </div>
 
           <div className="flex flex-1 justify-center w-full overflow-hidden">
-            <div className="border-r border-white/10 w-[80px] lg:w-[120px] shrink-0"></div>
+            <div className="border-r border-r w-[80px] lg:w-[120px] shrink-0"></div>
 
             <div className="flex-1 max-w-6xl p-6 overflow-hidden">
               <Outlet />
             </div>
 
-            <div className="border-l border-white/10 w-[80px] lg:w-[120px] shrink-0"></div>
+            <div className="border-l border-l w-[80px] lg:w-[120px] shrink-0"></div>
           </div>
         </div>
       </ThemeProvider>
