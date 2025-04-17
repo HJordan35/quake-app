@@ -15,7 +15,7 @@ function IndexComponent() {
     if (isAuthenticated && !isLoading) {
       navigate({ to: '/dashboard/home' })
     } else if (!isAuthenticated && !isLoading) {
-      navigate({ to: '/login', search: { redirect: '/dashboard/home' } })
+      navigate({ to: '/login', search: { redirect: '/' } })
     }
   }, [isAuthenticated, isLoading, navigate])
 

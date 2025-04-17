@@ -17,7 +17,6 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
   const location = useLocation()
 
   useEffect(() => {
-    // If not loading and not authenticated, redirect to login
     if (!isLoading && !isAuthenticated) {
       navigate({
         to: '/login',
@@ -29,7 +28,6 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
     }
   }, [isAuthenticated, isLoading, navigate, location])
 
-  // Show fallback while loading or not authenticated
   if (isLoading || !isAuthenticated) {
     return fallback ? (
       <>{fallback}</>
@@ -40,6 +38,5 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
     )
   }
 
-  // Render children if authenticated
   return <>{children}</>
 }
