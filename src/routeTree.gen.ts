@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
+import { Route as CallbackImport } from './routes/callback'
 import { Route as DashboardRouteImport } from './routes/dashboard/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as DashboardHomeImport } from './routes/dashboard/home'
@@ -22,6 +23,12 @@ import { Route as DashboardExploreImport } from './routes/dashboard/explore'
 const LoginRoute = LoginImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CallbackRoute = CallbackImport.update({
+  id: '/callback',
+  path: '/callback',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -67,6 +74,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRoute
     }
+    '/callback': {
+      id: '/callback'
+      path: '/callback'
+      fullPath: '/callback'
+      preLoaderRoute: typeof CallbackImport
+      parentRoute: typeof rootRoute
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -110,6 +124,7 @@ const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/callback': typeof CallbackRoute
   '/login': typeof LoginRoute
   '/dashboard/explore': typeof DashboardExploreRoute
   '/dashboard/home': typeof DashboardHomeRoute
@@ -118,6 +133,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/callback': typeof CallbackRoute
   '/login': typeof LoginRoute
   '/dashboard/explore': typeof DashboardExploreRoute
   '/dashboard/home': typeof DashboardHomeRoute
@@ -127,6 +143,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/callback': typeof CallbackRoute
   '/login': typeof LoginRoute
   '/dashboard/explore': typeof DashboardExploreRoute
   '/dashboard/home': typeof DashboardHomeRoute
@@ -137,15 +154,23 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/callback'
     | '/login'
     | '/dashboard/explore'
     | '/dashboard/home'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/login' | '/dashboard/explore' | '/dashboard/home'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/callback'
+    | '/login'
+    | '/dashboard/explore'
+    | '/dashboard/home'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/callback'
     | '/login'
     | '/dashboard/explore'
     | '/dashboard/home'
@@ -155,12 +180,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
+  CallbackRoute: typeof CallbackRoute
   LoginRoute: typeof LoginRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
+  CallbackRoute: CallbackRoute,
   LoginRoute: LoginRoute,
 }
 
@@ -176,6 +203,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/dashboard",
+        "/callback",
         "/login"
       ]
     },
@@ -188,6 +216,9 @@ export const routeTree = rootRoute
         "/dashboard/explore",
         "/dashboard/home"
       ]
+    },
+    "/callback": {
+      "filePath": "callback.tsx"
     },
     "/login": {
       "filePath": "login.tsx"

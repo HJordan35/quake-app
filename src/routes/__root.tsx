@@ -1,41 +1,27 @@
 import * as React from 'react'
-import { Outlet, createRootRouteWithContext, useNavigate } from '@tanstack/react-router'
+import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { ThemeProvider } from '@/components/theme/theme-provider'
 import '../__root.css'
-import { useAuth } from '@/context/AuthContext'
-import { Button } from '@/components/ui/button'
-import { UserIcon } from 'lucide-react'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { useAuth, AuthProvider } from '@/context/AuthContext'
 import { Link, useLocation } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
-interface MyRouterContext {
-  auth: {
-    isAuthenticated: boolean
-    user: { email: string } | null
-  }
-}
-export const Route = createRootRouteWithContext<MyRouterContext>()({
+import { UserMenu } from '@/auth/UserMenu'
+
+export const Route = createRootRoute({
   component: () => <RootComponent />,
 })
 
 function RootComponent() {
-  const { isAuthenticated, logout } = useAuth()
-  const navigate = useNavigate()
-  const { pathname } = useLocation()
-  const handleLogout = async () => {
-    try {
-      await logout(() => {
-        navigate({ to: '/login' })
-      })
-    } catch (error) {
-      console.error('Logout failed', error)
-    }
-  }
+  return (
+    <AuthProvider>
+      <AppLayout />
+    </AuthProvider>
+  )
+}
 
-  const handleAccount = () => {
-    // Navigate to account page or show account modal
-    console.log('Account clicked')
-  }
+function AppLayout() {
+  const { isAuthenticated } = useAuth()
+  const { pathname } = useLocation()
 
   return (
     <React.Fragment>
@@ -76,17 +62,7 @@ function RootComponent() {
                   </li>
                 </ul>
                 <div className="px-4 sm:px-6 lg:px-8 flex items-center">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <UserIcon className="h-5 w-5" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={handleAccount}>Account</DropdownMenuItem>
-                      <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <UserMenu />
                 </div>
               </>
             )}

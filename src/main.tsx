@@ -2,28 +2,22 @@ import { RouterProvider } from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { router } from './router'
-import { AuthProvider } from './context/AuthContextProvider'
-import { useAuth } from './context/AuthContext'
+import { Auth0ProviderWithNavigate } from './auth/Auth0Provider'
+
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router
   }
 }
 
-function InnerApp() {
-  const auth = useAuth()
-  return <RouterProvider router={router} context={{ auth }} />
-}
-
-// Render the app
 const rootElement = document.getElementById('root')!
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
-      <AuthProvider>
-        <InnerApp />
-      </AuthProvider>
+      <Auth0ProviderWithNavigate>
+        <RouterProvider router={router} />
+      </Auth0ProviderWithNavigate>
     </StrictMode>
   )
 }

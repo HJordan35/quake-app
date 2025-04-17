@@ -1,16 +1,9 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
+import { AuthGuard } from '@/auth/AuthGuard'
 
 export const Route = createFileRoute('/dashboard')({
   component: RouteComponent,
-  beforeLoad: ({ context, location }) => {
-    if (!context.auth.isAuthenticated) {
-      throw redirect({
-        to: '/login',
-        search: {
-          redirect: location.pathname,
-        },
-      })
-    }
+  beforeLoad: ({ location }) => {
     if (location.pathname === '/dashboard') {
       throw redirect({
         to: '/dashboard/home',
@@ -21,8 +14,10 @@ export const Route = createFileRoute('/dashboard')({
 
 function RouteComponent() {
   return (
-    <div className="space-y-6 w-full h-full">
-      <Outlet />
-    </div>
+    <AuthGuard>
+      <div className="space-y-6 w-full h-full">
+        <Outlet />
+      </div>
+    </AuthGuard>
   )
 }

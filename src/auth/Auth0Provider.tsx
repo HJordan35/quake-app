@@ -1,5 +1,4 @@
 import { Auth0Provider } from '@auth0/auth0-react'
-import { useNavigate } from '@tanstack/react-router'
 import { ReactNode } from 'react'
 
 interface Auth0ProviderWithNavigateProps {
@@ -13,17 +12,18 @@ interface AppState {
 }
 
 export const Auth0ProviderWithNavigate = ({ children }: Auth0ProviderWithNavigateProps) => {
-  const navigate = useNavigate()
-
   const domain = import.meta.env.VITE_AUTH0_DOMAIN
   const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID
-  const redirectUri = import.meta.env.VITE_AUTH0_CALLBACK_URL || window.location.origin
-
-  // Since we only need appState, we're ignoring the second parameter
+  const callbackUrl = import.meta.env.VITE_AUTH0_CALLBACK_URL || `${window.location.origin}/callback`
 
   const onRedirectCallback = (appState?: AppState) => {
     // Navigate to the stored return path or default to the root path
-    navigate({ to: appState?.returnTo || '/' })
+    const returnPath = appState?.returnTo || '/'
+    console.log('Auth0 redirect callback navigating to:', returnPath)
+
+    // Use window.location for navigation instead of useNavigate
+    // This works outside of the router context
+    window.location.assign(window.location.origin + returnPath)
   }
 
   if (!domain || !clientId) {
@@ -35,7 +35,7 @@ export const Auth0ProviderWithNavigate = ({ children }: Auth0ProviderWithNavigat
       domain={domain}
       clientId={clientId}
       authorizationParams={{
-        redirect_uri: redirectUri,
+        redirect_uri: callbackUrl,
       }}
       onRedirectCallback={onRedirectCallback}
     >
