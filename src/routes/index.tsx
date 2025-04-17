@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useAuth } from '@/context/AuthContext'
+import { useAuth } from '@/auth/AuthContext'
 import { useEffect } from 'react'
 import { Spinner } from '@/components/ui/spinner'
 export const Route = createFileRoute('/')({

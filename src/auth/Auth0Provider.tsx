@@ -5,29 +5,16 @@ interface Auth0ProviderWithNavigateProps {
   children: ReactNode
 }
 
-// Define a more specific type for appState
-interface AppState {
-  returnTo?: string
-  [key: string]: unknown
-}
-
 export const Auth0ProviderWithNavigate = ({ children }: Auth0ProviderWithNavigateProps) => {
   const domain = import.meta.env.VITE_AUTH0_DOMAIN
   const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID
-  const callbackUrl = import.meta.env.VITE_AUTH0_CALLBACK_URL || `${window.location.origin}/callback`
+  const callbackUrl = import.meta.env.VITE_AUTH0_CALLBACK_URL || `${window.location.origin}/dashboard/home`
 
-  const onRedirectCallback = (appState?: AppState) => {
-    // Navigate to the stored return path or default to the root path
-    const returnPath = appState?.returnTo || '/'
-    console.log('Auth0 redirect callback navigating to:', returnPath)
-
-    // Use window.location for navigation instead of useNavigate
-    // This works outside of the router context
-    window.location.assign(window.location.origin + returnPath)
-  }
-
-  if (!domain || !clientId) {
-    throw new Error('Auth0 domain and client ID must be provided in environment variables')
+  const onRedirectCallback = () => {
+    console.log('Auth Completed')
+    if (!domain || !clientId) {
+      throw new Error('Auth0 domain and client ID must be provided in environment variables')
+    }
   }
 
   return (
@@ -36,6 +23,8 @@ export const Auth0ProviderWithNavigate = ({ children }: Auth0ProviderWithNavigat
       clientId={clientId}
       authorizationParams={{
         redirect_uri: callbackUrl,
+        scope: 'openid profile email read:current_user read:current_user_metadata update:current_user_metadata',
+        audience: `https://${domain}/api/v2/`,
       }}
       onRedirectCallback={onRedirectCallback}
     >

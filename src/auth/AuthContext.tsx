@@ -7,6 +7,10 @@ export interface User {
   name?: string
   picture?: string
   sub?: string
+  user_metadata?: {
+    name?: string
+    email?: string
+  }
   [key: string]: unknown
 }
 
@@ -45,6 +49,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         ...auth0User,
       }
     : null
+
+  console.log('user', auth0User)
 
   const error = auth0Error ? auth0Error.message : null
 

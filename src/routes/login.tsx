@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { createFileRoute } from '@tanstack/react-router'
-import { useAuth } from '@/context/AuthContext'
+import { useAuth } from '@/auth/AuthContext'
 import { Loader2 } from 'lucide-react'
 import { FadeUp } from '@/components/animation/fade-up'
 

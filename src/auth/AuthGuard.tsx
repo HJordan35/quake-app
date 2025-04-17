@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useAuth } from '@/context/AuthContext'
+import { useAuth } from '@/auth/AuthContext'
 import { useNavigate, useLocation } from '@tanstack/react-router'
 
 interface AuthGuardProps {
