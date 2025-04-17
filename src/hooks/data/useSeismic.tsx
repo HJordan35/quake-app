@@ -18,6 +18,7 @@ export interface SeismicMessage {
       mag: number
       magtype: string
       time: string
+      lastupdate: string
       [key: string]: unknown
     }
     [key: string]: unknown

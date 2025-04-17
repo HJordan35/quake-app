@@ -17,6 +17,7 @@ interface SeismicMessage {
       mag: number
       magtype: string
       time: string
+      lastupdate: string
       [key: string]: unknown
     }
     [key: string]: unknown
@@ -54,7 +55,7 @@ export function SeismicTable({ parsedMessages, onSelectItem, initialSelectedInde
   }, [initialSelectedIndex, selectedIndex])
 
   if (parsedMessages.length === 0) {
-    return <p className="text-gray-400">No seismic events received yet.</p>
+    return <p>No seismic events received yet.</p>
   }
 
   const handleSelectItem = (index: number) => {
@@ -76,8 +77,8 @@ export function SeismicTable({ parsedMessages, onSelectItem, initialSelectedInde
 
       <div className="absolute top-[41px] bottom-[45px] left-0 right-0 overflow-y-auto">
         {parsedMessages.map((message, index) => {
-          const { flynn_region, lat, lon, mag, time } = message.data.properties
-          const formattedTime = formatDate(time)
+          const { flynn_region, lat, lon, mag, lastupdate } = message.data.properties
+          const formattedTime = formatDate(lastupdate)
           const isSelected = index === selectedIndex
 
           return (
