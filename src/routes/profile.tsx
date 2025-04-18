@@ -7,7 +7,7 @@ import { FadeUp } from '@/components/animation/fade-up'
 import { Loader2, User, AtSign } from 'lucide-react'
 import { useProfileService } from '@/services/profile-service'
 
-export const Route = createFileRoute('/dashboard/profile')({
+export const Route = createFileRoute('/profile')({
   component: RouteComponent,
 })
 

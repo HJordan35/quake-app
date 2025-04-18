@@ -11,14 +11,20 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ProfileImport } from './routes/profile'
 import { Route as LoginImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard/route'
 import { Route as IndexImport } from './routes/index'
-import { Route as DashboardProfileImport } from './routes/dashboard/profile'
 import { Route as DashboardHomeImport } from './routes/dashboard/home'
 import { Route as DashboardExploreImport } from './routes/dashboard/explore'
 
 // Create/Update Routes
+
+const ProfileRoute = ProfileImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LoginRoute = LoginImport.update({
   id: '/login',
@@ -36,12 +42,6 @@ const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
-} as any)
-
-const DashboardProfileRoute = DashboardProfileImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => DashboardRouteRoute,
 } as any)
 
 const DashboardHomeRoute = DashboardHomeImport.update({
@@ -81,6 +81,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileImport
+      parentRoute: typeof rootRoute
+    }
     '/dashboard/explore': {
       id: '/dashboard/explore'
       path: '/explore'
@@ -95,13 +102,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardHomeImport
       parentRoute: typeof DashboardRouteImport
     }
-    '/dashboard/profile': {
-      id: '/dashboard/profile'
-      path: '/profile'
-      fullPath: '/dashboard/profile'
-      preLoaderRoute: typeof DashboardProfileImport
-      parentRoute: typeof DashboardRouteImport
-    }
   }
 }
 
@@ -110,13 +110,11 @@ declare module '@tanstack/react-router' {
 interface DashboardRouteRouteChildren {
   DashboardExploreRoute: typeof DashboardExploreRoute
   DashboardHomeRoute: typeof DashboardHomeRoute
-  DashboardProfileRoute: typeof DashboardProfileRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardExploreRoute: DashboardExploreRoute,
   DashboardHomeRoute: DashboardHomeRoute,
-  DashboardProfileRoute: DashboardProfileRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
@@ -127,18 +125,18 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
   '/dashboard/explore': typeof DashboardExploreRoute
   '/dashboard/home': typeof DashboardHomeRoute
-  '/dashboard/profile': typeof DashboardProfileRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
   '/dashboard/explore': typeof DashboardExploreRoute
   '/dashboard/home': typeof DashboardHomeRoute
-  '/dashboard/profile': typeof DashboardProfileRoute
 }
 
 export interface FileRoutesById {
@@ -146,9 +144,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
   '/dashboard/explore': typeof DashboardExploreRoute
   '/dashboard/home': typeof DashboardHomeRoute
-  '/dashboard/profile': typeof DashboardProfileRoute
 }
 
 export interface FileRouteTypes {
@@ -157,25 +155,25 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/login'
+    | '/profile'
     | '/dashboard/explore'
     | '/dashboard/home'
-    | '/dashboard/profile'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dashboard'
     | '/login'
+    | '/profile'
     | '/dashboard/explore'
     | '/dashboard/home'
-    | '/dashboard/profile'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
     | '/login'
+    | '/profile'
     | '/dashboard/explore'
     | '/dashboard/home'
-    | '/dashboard/profile'
   fileRoutesById: FileRoutesById
 }
 
@@ -183,12 +181,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
+  ProfileRoute: typeof ProfileRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
   LoginRoute: LoginRoute,
+  ProfileRoute: ProfileRoute,
 }
 
 export const routeTree = rootRoute
@@ -203,7 +203,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/dashboard",
-        "/login"
+        "/login",
+        "/profile"
       ]
     },
     "/": {
@@ -213,12 +214,14 @@ export const routeTree = rootRoute
       "filePath": "dashboard/route.tsx",
       "children": [
         "/dashboard/explore",
-        "/dashboard/home",
-        "/dashboard/profile"
+        "/dashboard/home"
       ]
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/profile": {
+      "filePath": "profile.tsx"
     },
     "/dashboard/explore": {
       "filePath": "dashboard/explore.tsx",
@@ -226,10 +229,6 @@ export const routeTree = rootRoute
     },
     "/dashboard/home": {
       "filePath": "dashboard/home.tsx",
-      "parent": "/dashboard"
-    },
-    "/dashboard/profile": {
-      "filePath": "dashboard/profile.tsx",
       "parent": "/dashboard"
     }
   }

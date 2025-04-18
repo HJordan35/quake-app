@@ -98,7 +98,10 @@ export const earthquakeService = {
 
       return await response.json()
     } catch (error) {
-      console.error('Error fetching earthquake data:', error)
+      // Only log errors in non-test environments
+      if (import.meta.env.MODE !== 'test') {
+        console.error('Error fetching earthquake data:', error)
+      }
       throw error
     }
   },
