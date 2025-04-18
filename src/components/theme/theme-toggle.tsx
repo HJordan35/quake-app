@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Moon, Sun } from 'lucide-react'
 import { useTheme } from '@/hooks/theme/useTheme'
 import { Button } from '@/components/ui/button'
